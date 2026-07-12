@@ -49,5 +49,5 @@ export const patchMatchBodySchema = z
   })
   .strict();
 
-export type CreateMatchInput = z.infer<typeof createMatchSchema>;
-export type PatchMatchInput = z.infer<typeof patchMatchBodySchema>;
+export type CreateMatchInput = z.input<typeof createMatchSchema>;
+export type PatchMatchInput = z.input<typeof patchMatchBodySchema>;
