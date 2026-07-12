@@ -1,0 +1,17 @@
+{
+  "name": "game-screan",
+  "private": true,
+  "packageManager": "pnpm@10.12.1",
+  "scripts": {
+    "dev": "npx --yes kill-port 4000 && concurrently -n api,web -c blue,green \"pnpm --filter @game-screan/api dev\" \"pnpm --filter web dev\"",
+    "dev:api": "pnpm --filter @game-screan/api dev",
+    "dev:web": "pnpm --filter web dev",
+    "build": "pnpm --filter @game-screan/api build && pnpm --filter web build",
+    "start:api": "pnpm --filter @game-screan/api start",
+    "start:web": "pnpm --filter web start"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "kill-port": "^2.0.1"
+  }
+}
