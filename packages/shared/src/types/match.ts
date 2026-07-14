@@ -9,6 +9,7 @@ export const ROUND_VALUES = [
 export const SEGMENT_VALUES = [
   "WHAT_DO_YOU_KNOW",
   "AUCTION",
+  "PLAYER_STORY",
   "BUZZER",
   "IMPOSSIBLE",
   "WHO_AM_I",

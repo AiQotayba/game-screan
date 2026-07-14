@@ -11,6 +11,7 @@ export const ROUND_LABELS: Record<Round, string> = {
 export const SEGMENT_LABELS: Record<Segment, string> = {
   WHAT_DO_YOU_KNOW: "ماذا تعرف",
   AUCTION: "المزاد",
+  PLAYER_STORY: "قصة لاعب",
   BUZZER: "الجرس",
   IMPOSSIBLE: "المستحيل",
   WHO_AM_I: "من أنا",
@@ -19,6 +20,7 @@ export const SEGMENT_LABELS: Record<Segment, string> = {
 export const SEGMENT_DISPLAY_TITLES: Record<Segment, string> = {
   WHAT_DO_YOU_KNOW: "ماذا تعرف..؟",
   AUCTION: "المزاد",
+  PLAYER_STORY: "قصة لاعب",
   BUZZER: "الجرس",
   IMPOSSIBLE: "المستحيل",
   WHO_AM_I: "من أنا",
@@ -35,6 +37,7 @@ export const ROUND_DISPLAY_LABELS: Record<Round, string> = {
 export const SEGMENT_ORDER: Segment[] = [
   "WHAT_DO_YOU_KNOW",
   "AUCTION",
+  "PLAYER_STORY",
   "BUZZER",
   "IMPOSSIBLE",
   "WHO_AM_I",
