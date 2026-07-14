@@ -12,7 +12,6 @@ export const SEGMENT_VALUES = [
   "PLAYER_STORY",
   "BUZZER",
   "IMPOSSIBLE",
-  "WHO_AM_I",
 ] as const;
 
 export type Round = (typeof ROUND_VALUES)[number];
