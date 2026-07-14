@@ -18,7 +18,7 @@ const app = express();
 app.use(
   cors({
     origin: corsOrigin.split(",").map((o) => o.trim()),
-    methods: ["GET", "POST", "PATCH", "OPTIONS"],
+    methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
   }),
 );
 app.use(express.json());

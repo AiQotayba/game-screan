@@ -210,3 +210,12 @@ export async function deleteMatch(id: string): Promise<boolean> {
     };
   });
 }
+
+export async function clearAllMatches(): Promise<void> {
+  return withAppState(async () => {
+    return {
+      next: { matches: [], activeMatchId: null },
+      result: undefined,
+    };
+  });
+}

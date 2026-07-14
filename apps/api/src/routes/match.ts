@@ -13,6 +13,7 @@ import {
   listMatches,
   updateMatch,
   deleteMatch,
+  clearAllMatches,
 } from "../lib/db.js";
 import { emitMatchState } from "../lib/emit-state.js";
 
@@ -125,5 +126,11 @@ matchRouter.delete("/:id", async (req, res) => {
   // For simplicity, we just emit null. Clients will sync and get the right state.
   emitMatchState(null);
   
+  return res.json({ success: true });
+});
+
+matchRouter.post("/clear", async (_req, res) => {
+  await clearAllMatches();
+  emitMatchState(null);
   return res.json({ success: true });
 });

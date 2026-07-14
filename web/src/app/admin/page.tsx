@@ -383,6 +383,32 @@ export default function AdminPage() {
     }
   };
 
+  const handleClearAll = async () => {
+    setBusy(true);
+    setError(null);
+    try {
+      const res = await apiFetch("/api/match/clear", { method: "POST" });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error ?? "فشل تنظيف البيانات");
+      }
+      setAuctionRunning(false);
+      reset({
+        playerA: { name: "", image: DEFAULT_AVATAR, rank: 0 },
+        playerB: { name: "", image: DEFAULT_AVATAR, rank: 0 },
+        round: "ROUND_16",
+        segment: "WHAT_DO_YOU_KNOW",
+        isFinal: false,
+      });
+      setSetupStep("players");
+      showToast("تم تنظيف جميع البيانات");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "خطأ");
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const handleNextSegment = async () => {
     if (!activeId || !matchState) return;
     if (!isLastSegment) {
@@ -888,6 +914,20 @@ export default function AdminPage() {
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /><line x1="10" x2="10" y1="11" y2="17" /><line x1="14" x2="14" y1="11" y2="17" /></svg>
           حذف المباراة
+        </button>
+
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => {
+            if (window.confirm("تحذير! سيتم حذف جميع المباريات والبيانات نهائياً. هل أنت متأكد؟")) {
+              void handleClearAll();
+            }
+          }}
+          className="flex items-center gap-2 rounded-xl bg-orange-700 px-4 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-orange-800 disabled:opacity-50"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+          تنظيف كل البيانات
         </button>
       </div>
     </div>
