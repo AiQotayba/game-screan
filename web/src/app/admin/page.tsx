@@ -356,6 +356,33 @@ export default function AdminPage() {
     }
   };
 
+  const handleDeleteMatch = async () => {
+    if (!activeId) return;
+    setBusy(true);
+    setError(null);
+    try {
+      const res = await apiFetch(`/api/match/${activeId}`, { method: "DELETE" });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error ?? "فشل الحذف");
+      }
+      setAuctionRunning(false);
+      reset({
+        playerA: { name: "", image: DEFAULT_AVATAR, rank: 0 },
+        playerB: { name: "", image: DEFAULT_AVATAR, rank: 0 },
+        round: "ROUND_16",
+        segment: "WHAT_DO_YOU_KNOW",
+        isFinal: false,
+      });
+      setSetupStep("players");
+      showToast("تم حذف المباراة بشكل نهائي");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "خطأ");
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const handleNextSegment = async () => {
     if (!activeId || !matchState) return;
     if (!isLastSegment) {
@@ -834,19 +861,35 @@ export default function AdminPage() {
           </motion.div>
         )}
       </main>
-      <button
-        type="button"
-        disabled={busy}
-        onClick={() => {
-          if (window.confirm("هل أنت متأكد من إنهاء المباراة الآن وإظهار النتائج؟")) {
-            void handleEndMatch();
-          }
-        }}
-        className="flex items-center gap-2 rounded-xl bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-red-700 disabled:opacity-50"
-      >
-        <Trophy size={16} aria-hidden />
-        إنهاء وإظهار النتائج
-      </button>
+      <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-40">
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => {
+            if (window.confirm("هل أنت متأكد من إنهاء المباراة الآن وإظهار النتائج؟")) {
+              void handleEndMatch();
+            }
+          }}
+          className="flex items-center gap-2 rounded-xl bg-red-600 px-4 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-red-700 disabled:opacity-50"
+        >
+          <Trophy size={16} aria-hidden />
+          إنهاء وإظهار النتائج
+        </button>
+
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => {
+            if (window.confirm("هل أنت متأكد من حذف هذه المباراة تماماً؟ لا يمكن التراجع عن هذا الإجراء.")) {
+              void handleDeleteMatch();
+            }
+          }}
+          className="flex items-center gap-2 rounded-xl bg-gray-800 px-4 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-gray-900 disabled:opacity-50"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+          حذف المباراة
+        </button>
+      </div>
     </div>
   );
 }

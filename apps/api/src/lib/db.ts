@@ -190,3 +190,23 @@ export async function updateMatch(body: PatchMatchInput): Promise<Match | null> 
     };
   });
 }
+
+export async function deleteMatch(id: string): Promise<boolean> {
+  return withAppState(async (state) => {
+    const idx = state.matches.findIndex((m) => m.id === id);
+    if (idx === -1) return { next: state, result: false };
+
+    const matches = [...state.matches];
+    matches.splice(idx, 1);
+
+    let activeMatchId = state.activeMatchId;
+    if (activeMatchId === id) {
+      activeMatchId = null;
+    }
+
+    return {
+      next: { matches, activeMatchId },
+      result: true,
+    };
+  });
+}

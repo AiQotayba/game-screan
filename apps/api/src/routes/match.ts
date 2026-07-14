@@ -12,6 +12,7 @@ import {
   getWaitingPreview,
   listMatches,
   updateMatch,
+  deleteMatch,
 } from "../lib/db.js";
 import { emitMatchState } from "../lib/emit-state.js";
 
@@ -107,4 +108,22 @@ matchRouter.patch("/", async (req, res) => {
 
   emitMatchState(updated);
   return res.json(updated);
+});
+
+matchRouter.delete("/:id", async (req, res) => {
+  const id = req.params.id;
+  if (!id) {
+    return res.status(400).json({ error: "id مطلوب" });
+  }
+
+  const success = await deleteMatch(id);
+  if (!success) {
+    return res.status(404).json({ error: "المباراة غير موجودة" });
+  }
+
+  // After deletion, we might need to emit a null state if this was the active match
+  // For simplicity, we just emit null. Clients will sync and get the right state.
+  emitMatchState(null);
+  
+  return res.json({ success: true });
 });
