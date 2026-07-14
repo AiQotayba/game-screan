@@ -333,30 +333,35 @@ export default function AdminPage() {
     }
   };
 
+  const handleEndMatch = async () => {
+    if (!activeId || !matchState) return;
+    setBusy(true);
+    setError(null);
+    try {
+      await patchAndSync(activeId, { status: "FINISHED" });
+      setAuctionRunning(false);
+      reset({
+        playerA: { name: "", image: DEFAULT_AVATAR, rank: 0 },
+        playerB: { name: "", image: DEFAULT_AVATAR, rank: 0 },
+        round: "ROUND_16",
+        segment: "WHAT_DO_YOU_KNOW",
+        isFinal: false,
+      });
+      setSetupStep("players");
+      showToast("تم إنهاء المباراة وعرض النتائج");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "خطأ");
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const handleNextSegment = async () => {
     if (!activeId || !matchState) return;
     if (!isLastSegment) {
       await shiftSegment(1);
     } else {
-      setBusy(true);
-      setError(null);
-      try {
-        await patchAndSync(activeId, { status: "FINISHED" });
-        setAuctionRunning(false);
-        reset({
-          playerA: { name: "", image: DEFAULT_AVATAR, rank: 0 },
-          playerB: { name: "", image: DEFAULT_AVATAR, rank: 0 },
-          round: "ROUND_16",
-          segment: "WHAT_DO_YOU_KNOW",
-          isFinal: false,
-        });
-        setSetupStep("players");
-        showToast("إنهاء المباراة");
-      } catch (e) {
-        setError(e instanceof Error ? e.message : "خطأ");
-      } finally {
-        setBusy(false);
-      }
+      await handleEndMatch();
     }
   };
 
@@ -824,6 +829,24 @@ export default function AdminPage() {
                 )}
               </button>
             </div>
+            
+            {!isLastSegment && (
+              <div className="flex pt-2">
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={() => {
+                    if (window.confirm("هل أنت متأكد من إنهاء المباراة الآن وإظهار النتائج؟")) {
+                      void handleEndMatch();
+                    }
+                  }}
+                  className="flex w-full items-center justify-center gap-2 rounded-2xl bg-red-600 py-4 text-lg font-bold text-white shadow-md transition-colors hover:bg-red-700 disabled:opacity-50"
+                >
+                  <Trophy size={20} aria-hidden />
+                  إنهاء المباراة وإظهار النتائج
+                </button>
+              </div>
+            )}
           </motion.div>
         )}
       </main>
