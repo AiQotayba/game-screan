@@ -12,7 +12,7 @@ const uploadDir =
   process.env.UPLOAD_DIR ?? path.join(process.cwd(), "uploads");
 
 const port = Number.parseInt(process.env.PORT ?? "4000", 10);
-const corsOrigin = process.env.CORS_ORIGIN ?? "http://localhost:3000";
+const corsOrigin = process.env.CORS_ORIGIN ?? "https://ga.sy-calculator.com";
 
 const app = express();
 app.use(
