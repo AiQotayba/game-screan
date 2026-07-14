@@ -76,7 +76,7 @@ export function DisplayWinner({ state }: { state: MatchState }) {
             <p className="display-winner__name">{playerA.name}</p>
             <p className="display-winner__score">{scoreA}</p>
           </div>
-          <span className="font-azkadina display-winner__vs" aria-hidden>
+          <span className="font-sans font-black display-winner__vs" aria-hidden>
             VS
           </span>
           <div className="display-winner__tie-slot">

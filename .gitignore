@@ -8,3 +8,4 @@ dist/
 */data/app-data.json
 uploads/
 package-lock.json
+*app-state.json
