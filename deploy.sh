@@ -12,10 +12,9 @@ else
   git clone https://github.com/AiQotayba/game-screan.git
   cd game-screan
 fi
+rm -rf node_modules
+rm -rf apps/api/node_modules
 pnpm install
-pnpm build
 pm2 delete api-ga || true
-pm2 delete game-screan-web || true
 PORT=5800 pm2 start pnpm --name "api-ga" -- start:api
-pm2 start pnpm --name "game-screan-web" -- start:web
 pm2 save
