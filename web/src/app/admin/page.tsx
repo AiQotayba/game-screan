@@ -23,7 +23,7 @@ import {
   type Match,
 } from "@game-screan/shared";
 import { useMatchStore } from "@/store/matchStore";
-import { apiFetch } from "@/lib/api-client";
+import { apiFetch, getSocketBase } from "@/lib/api-client";
 import { getSocket } from "@/lib/socket-client";
 import { cn } from "@/lib/cn";
 import Link from "next/link";
@@ -361,7 +361,7 @@ export default function AdminPage() {
     setBusy(true);
     setError(null);
     try {
-      const res = await apiFetch(`/api/match/${activeId}`, { method: "DELETE" });
+      const res = await fetch(`${getSocketBase()}/api/match/${activeId}`, { method: "DELETE" });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.error ?? "فشل الحذف");
@@ -387,7 +387,7 @@ export default function AdminPage() {
     setBusy(true);
     setError(null);
     try {
-      const res = await apiFetch("/api/match/clear", { method: "POST" });
+      const res = await fetch(`${getSocketBase()}/api/match/clear`, { method: "POST" });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.error ?? "فشل تنظيف البيانات");
