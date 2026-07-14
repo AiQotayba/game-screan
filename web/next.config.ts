@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 import path from "node:path";
 
-const apiOrigin = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+const apiOrigin = process.env.NEXT_PUBLIC_API_URL ?? "https://api-ga.sy-calculator.com";
 const monorepoRoot = path.join(__dirname, "..");
 
 const nextConfig: NextConfig = {
