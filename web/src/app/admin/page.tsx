@@ -48,9 +48,12 @@ const ROUNDS_UI = ROUND_VALUES.map((id) => ({
 }));
 
 async function patchMatch(id: string, data: Record<string, unknown>) {
-  const res = await apiFetch("/api/match", {
+  const base = getSocketBase();
+  const res = await fetch(`${base}/api/match`, {
     method: "PATCH",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ id, data }),
+    cache: "no-store",
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
@@ -118,7 +121,7 @@ export default function AdminPage() {
   useEffect(() => {
     void (async () => {
       try {
-        const res = await apiFetch("/health");
+        const res = await fetch(`${getSocketBase()}/health`, { cache: "no-store" });
         const json = await res.json();
         setApiOffline(!json.ok);
       } catch {
@@ -138,7 +141,7 @@ export default function AdminPage() {
     const syncActive = () => {
       void (async () => {
         try {
-          const res = await apiFetch("/api/match?active=true");
+          const res = await fetch(`${getSocketBase()}/api/match?active=true`, { cache: "no-store" });
           if (!res.ok) return;
           const json = await res.json();
           if (json?.id) applyRemoteState(json as ReturnType<typeof toMatchState>);
@@ -209,9 +212,11 @@ export default function AdminPage() {
           passActive: false,
         },
       };
-      const res = await apiFetch("/api/match", {
+      const res = await fetch(`${getSocketBase()}/api/match`, {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
+        cache: "no-store",
       });
       const json = await res.json().catch(() => ({}));
       if (!res.ok) {
