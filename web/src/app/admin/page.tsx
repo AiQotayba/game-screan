@@ -626,7 +626,20 @@ export default function AdminPage() {
                   {stapValue}
                 </p>
               </div>
-              <div className="flex shrink-0 items-center sm:justify-end">
+              <div className="flex shrink-0 items-center gap-2 sm:justify-end">
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={() => {
+                    if (window.confirm("هل أنت متأكد من إنهاء المباراة الآن وإظهار النتائج؟")) {
+                      void handleEndMatch();
+                    }
+                  }}
+                  className="flex items-center gap-2 rounded-xl bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-red-700 disabled:opacity-50"
+                >
+                  <Trophy size={16} aria-hidden />
+                  إنهاء وإظهار النتائج
+                </button>
                 <Link
                   className="rounded-xl border border-purple-200 bg-purple-50 px-4 py-2.5 text-sm font-semibold text-purple-700 transition hover:bg-purple-100"
                   href="/display"
@@ -830,23 +843,6 @@ export default function AdminPage() {
               </button>
             </div>
             
-            {!isLastSegment && (
-              <div className="flex pt-2">
-                <button
-                  type="button"
-                  disabled={busy}
-                  onClick={() => {
-                    if (window.confirm("هل أنت متأكد من إنهاء المباراة الآن وإظهار النتائج؟")) {
-                      void handleEndMatch();
-                    }
-                  }}
-                  className="flex w-full items-center justify-center gap-2 rounded-2xl bg-red-600 py-4 text-lg font-bold text-white shadow-md transition-colors hover:bg-red-700 disabled:opacity-50"
-                >
-                  <Trophy size={20} aria-hidden />
-                  إنهاء المباراة وإظهار النتائج
-                </button>
-              </div>
-            )}
           </motion.div>
         )}
       </main>
