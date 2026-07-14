@@ -14,6 +14,7 @@ export const SEGMENT_LABELS: Record<Segment, string> = {
   PLAYER_STORY: "قصة لاعب",
   BUZZER: "الجرس",
   IMPOSSIBLE: "المستحيل",
+  COMPENSATION: "التعويض",
 };
 
 export const SEGMENT_DISPLAY_TITLES: Record<Segment, string> = {
@@ -22,6 +23,7 @@ export const SEGMENT_DISPLAY_TITLES: Record<Segment, string> = {
   PLAYER_STORY: "قصة لاعب",
   BUZZER: "الجرس",
   IMPOSSIBLE: "المستحيل",
+  COMPENSATION: "التعويض",
 };
 
 export const ROUND_DISPLAY_LABELS: Record<Round, string> = {
@@ -38,4 +40,5 @@ export const SEGMENT_ORDER: Segment[] = [
   "PLAYER_STORY",
   "BUZZER",
   "IMPOSSIBLE",
+  "COMPENSATION",
 ];
