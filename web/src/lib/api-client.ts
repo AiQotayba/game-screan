@@ -10,15 +10,19 @@ export function getApiBase(): string {
 }
 
 /**
- * Socket.io يجب أن يتصل مباشرة بالـ API — بروكسي Next لا يدعم WebSocket/long-polling بشكل موثوق.
+ * للاتصال المباشر بالـ API (Socket.io وطلبات PATCH/POST/DELETE).
+ * في المتصفح: يستخدم origin الويب ليمر عبر Next.js rewrites (يحل مشكلة SSL).
+ * على السيرفر (SSR): يتصل مباشرة بالـ API.
  */
 export function getSocketBase(): string {
+  // في المتصفح — استخدم نفس origin الموقع حتى تمر الطلبات عبر Next.js rewrites
+  if (typeof window !== "undefined") {
+    return window.location.origin.replace(/\/$/, "");
+  }
+
+  // على السيرفر — تصل مباشرة إلى الـ API
   const configured = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "");
   if (configured) return configured;
-
-  if (typeof window !== "undefined") {
-    return `${window.location.protocol}//${window.location.hostname}:4000`;
-  }
 
   return DEFAULT_API;
 }

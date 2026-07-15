@@ -10,7 +10,9 @@ export function getSocket(): Socket {
     throw new Error("Socket متاح في المتصفح فقط");
   }
   if (!socket) {
-    const url = getSocketBase();
+    // Socket.io يجب أن يتصل مباشرة بالـ API (ليس عبر Next.js)
+    const configured = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "");
+    const url = configured ?? `${window.location.protocol}//${window.location.hostname}:4000`;
     socket = io(url, {
       path: "/socket.io",
       transports: ["websocket", "polling"],
