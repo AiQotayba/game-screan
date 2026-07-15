@@ -80,7 +80,7 @@ export function ActiveMatchView({ activeId, busy, setBusy, setError, showToast }
     if (!matchState) return 0;
     return Math.max(0, SEGMENT_ORDER.indexOf(matchState.segment));
   }, [matchState]);
-  
+
   const currentSegmentId = matchState?.segment ?? "WHAT_DO_YOU_KNOW";
   const currentSegmentLabel = SEGMENT_LABELS[currentSegmentId];
   const isFirstSegment = segmentIndex === 0;
@@ -275,7 +275,7 @@ export function ActiveMatchView({ activeId, busy, setBusy, setError, showToast }
       </div>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        {(["A", "B"] as const).map((side) => {
+        {(["B", "A"] as const).map((side) => {
           const isA = side === "A";
           const name = isA ? matchState.playerA.name : matchState.playerB.name;
           const score = isA ? matchState.playerA.rank : matchState.playerB.rank;
