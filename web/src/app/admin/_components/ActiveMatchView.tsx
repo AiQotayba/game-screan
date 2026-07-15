@@ -274,7 +274,7 @@ export function ActiveMatchView({ activeId, busy, setBusy, setError, showToast }
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 reverse">
         {(["B", "A"] as const).map((side) => {
           const isA = side === "A";
           const name = isA ? matchState.playerA.name : matchState.playerB.name;
