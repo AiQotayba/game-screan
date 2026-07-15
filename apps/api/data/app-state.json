@@ -1,30 +1,4 @@
 {
-  "matches": [
-    {
-      "id": "9ddc61c7-781b-4bb1-85d8-ffc4922a3716",
-      "playerA": {
-        "name": "asdasd",
-        "image": "#",
-        "rank": 4,
-        "misses": 0,
-        "passActive": false
-      },
-      "playerB": {
-        "name": "022",
-        "image": "#",
-        "rank": 3,
-        "misses": 0,
-        "passActive": false
-      },
-      "round": "FINAL",
-      "segment": "WHAT_DO_YOU_KNOW",
-      "timer": null,
-      "isFinal": true,
-      "status": "SETUP",
-      "question": null,
-      "createdAt": "2026-07-15T03:08:24.793Z",
-      "updatedAt": "2026-07-15T03:08:29.526Z"
-    }
-  ],
-  "activeMatchId": "9ddc61c7-781b-4bb1-85d8-ffc4922a3716"
+  "matches": [],
+  "activeMatchId": null
 }
