@@ -10,16 +10,10 @@ export function getSocket(): Socket {
     throw new Error("Socket متاح في المتصفح فقط");
   }
   if (!socket) {
-    // Socket.io يجب أن يتصل مباشرة بالـ API (ليس عبر Next.js)
-    const configured = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "");
-    let url = configured ?? `${window.location.protocol}//${window.location.hostname}:4000`;
+    // نستخدم getSocketBase لكي يمر الاتصال عبر Next.js (الذي يدعم البروكسي الآن)
+    // هذا يحل مشكلة الـ SSL لأن Next.js يتعامل مع الـ API داخلياً
+    const url = getSocketBase();
     
-    // إذا كان الموقع يعمل عبر HTTPS وكان الرابط يدوياً يستخدم http://، نقم بتحويله إلى https://
-    // ليقوم Socket.io باستخدام wss:// تلقائياً لتجنب مشكلة Mixed Content
-    if (typeof window !== "undefined" && window.location.protocol === "https:" && url.startsWith("http://")) {
-      url = url.replace("http://", "https://");
-    }
-
     socket = io(url, {
       path: "/socket.io",
       transports: ["websocket", "polling"],
