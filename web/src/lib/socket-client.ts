@@ -12,7 +12,14 @@ export function getSocket(): Socket {
   if (!socket) {
     // Socket.io يجب أن يتصل مباشرة بالـ API (ليس عبر Next.js)
     const configured = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "");
-    const url = configured ?? `${window.location.protocol}//${window.location.hostname}:4000`;
+    let url = configured ?? `${window.location.protocol}//${window.location.hostname}:4000`;
+    
+    // إذا كان الموقع يعمل عبر HTTPS وكان الرابط يدوياً يستخدم http://، نقم بتحويله إلى https://
+    // ليقوم Socket.io باستخدام wss:// تلقائياً لتجنب مشكلة Mixed Content
+    if (typeof window !== "undefined" && window.location.protocol === "https:" && url.startsWith("http://")) {
+      url = url.replace("http://", "https://");
+    }
+
     socket = io(url, {
       path: "/socket.io",
       transports: ["websocket", "polling"],
