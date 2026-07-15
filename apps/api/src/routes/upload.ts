@@ -4,23 +4,13 @@ import path from "node:path";
 import type { NextFunction, Request, Response } from "express";
 import { Router } from "express";
 import multer from "multer";
+import sharp from "sharp";
 
 const uploadDir = process.env.UPLOAD_DIR ?? path.join(process.cwd(), "uploads");
 
 mkdirSync(uploadDir, { recursive: true });
 
-const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (_req, file, cb) => {
-    const ext = path.extname(file.originalname).toLowerCase() || ".jpg";
-    const safe = [".jpg", ".jpeg", ".png", ".webp", ".gif"].includes(ext)
-      ? ext
-      : ".jpg";
-    cb(null, `${randomUUID()}${safe}`);
-  },
-});
+const storage = multer.memoryStorage();
 
 const upload = multer({
   storage,
@@ -47,11 +37,27 @@ function handleUploadError(err: unknown, res: Response, next: NextFunction) {
 }
 
 uploadRouter.post("/player", (req, res, next) => {
-  upload.single("file")(req, res, (err) => {
+  upload.single("file")(req, res, async (err) => {
     if (err) return handleUploadError(err, res, next);
     if (!req.file) {
       return res.status(400).json({ error: "لم يُرفع ملف" });
     }
-    return res.status(201).json({ url: `/uploads/${req.file.filename}` });
+
+    const filename = `${randomUUID()}.webp`;
+    const outputPath = path.join(uploadDir, filename);
+
+    try {
+      // التحقق من صلاحية الصورة وتغيير حجمها وضغطها
+      await sharp(req.file.buffer)
+        .resize({ width: 800, height: 800, fit: "inside", withoutEnlargement: true })
+        .webp({ quality: 80 })
+        .toFile(outputPath);
+
+      return res.status(201).json({ url: `/uploads/${filename}` });
+    } catch (sharpError) {
+      // sharp will throw an error if the buffer is not a valid image
+      console.error("Image processing error:", sharpError);
+      return res.status(400).json({ error: "ملف الصورة غير صالح أو تالف" });
+    }
   });
 });
